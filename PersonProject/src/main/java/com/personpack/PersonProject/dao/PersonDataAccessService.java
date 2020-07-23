@@ -21,6 +21,12 @@ public class PersonDataAccessService implements PersonDao {
 		return 1;
 	}
 
+	@Override
+	public List<Person> getPersonDetails() {
+		// TODO Auto-generated method stub
+		return DB;
+	}
+
 	
 		
 	}

@@ -1,5 +1,6 @@
 package com.personpack.PersonProject.dao;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -15,5 +16,6 @@ public interface PersonDao {
 		UUID id = UUID.randomUUID();
 		return insertPerson(id, person);
 	}
-
+	
+	List<Person> getPersonDetails();
 }

@@ -1,5 +1,7 @@
 package com.personpack.PersonProject.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,5 +20,9 @@ public class PersonService {
 	PersonService(@Qualifier("perdao") PersonDao personDao)
 	{
 		pd = personDao;
+	}
+	public List<Person> getPerson()
+	{
+		return pd.getPersonDetails();
 	}
 }

@@ -1,6 +1,9 @@
 package com.personpack.PersonProject.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,11 @@ public class PersonController {
 	public void addPerson(@RequestBody Person p)
 	{
 		ps.insertPerson(p);
+	}
+	@GetMapping
+	public List getPerson()
+	{
+		return ps.getPerson();
 	}
 	
 
