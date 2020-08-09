@@ -61,18 +61,11 @@ public class PersonSecurityConf extends WebSecurityConfigurerAdapter {
 	
 	
 	
+
 	
 	/*
-	 * @Autowired public PersonSecurityConf(PasswordEncoder ps , UserDetailsService
-	 * userDetailsService) { this.ps = ps; this.userDetailsService =
-	 * userDetailsService; }
+	 * private String encodeYourPassword(String pass) { return ps.encode(pass); }
 	 */
-	
-	
-	private String encodeYourPassword(String pass)
-	{
-		return ps.encode(pass);
-	}
 	
 	
 	/*
