@@ -24,7 +24,7 @@ public enum Roles {
 		this.permissionsToRoles = permissionsToRoles;
 	}
 
-	Set<SimpleGrantedAuthority> geGrantedAuthorities()
+	public Set<SimpleGrantedAuthority> geGrantedAuthorities()
 	{
 		Set<SimpleGrantedAuthority> grantpermissions = getPermissionsToRoles().
 				stream().map(per -> new SimpleGrantedAuthority(per.getPermission()))

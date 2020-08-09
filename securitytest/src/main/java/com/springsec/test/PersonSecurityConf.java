@@ -3,6 +3,8 @@ package com.springsec.test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import com.springsec.test.auth.ApplicationUserService;
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +37,12 @@ public class PersonSecurityConf extends WebSecurityConfigurerAdapter {
 			.defaultSuccessUrl("/firstpage",true)
 		  .and() 
 		  .rememberMe()
+		  .rememberMeParameter("rememberme")
+		  .and()
+		  .logout()
+		  	.logoutUrl("/logout")
+		  	.logoutSuccessUrl("/login")
+		  	.deleteCookies("JSESSIONID","rememberme")
 		 ;
 		
 			//.httpBasic();
@@ -46,6 +56,18 @@ public class PersonSecurityConf extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	PasswordEncoder ps;
+	@Autowired
+	private ApplicationUserService userDetailsService;
+	
+	
+	
+	
+	/*
+	 * @Autowired public PersonSecurityConf(PasswordEncoder ps , UserDetailsService
+	 * userDetailsService) { this.ps = ps; this.userDetailsService =
+	 * userDetailsService; }
+	 */
+	
 	
 	private String encodeYourPassword(String pass)
 	{
@@ -53,21 +75,31 @@ public class PersonSecurityConf extends WebSecurityConfigurerAdapter {
 	}
 	
 	
+	/*
+	 * @Override
+	 * 
+	 * @Bean protected UserDetailsService userDetailsService() { // TODO
+	 * Auto-generated method stub UserDetails user1 = User.builder().username("eby")
+	 * .password(encodeYourPassword("pass123"))
+	 * .authorities(Roles.USER.geGrantedAuthorities()) .build();
+	 * 
+	 * UserDetails user2 = User.builder().username("john")
+	 * .password(encodeYourPassword("pass123"))
+	 * .authorities(Roles.ADMIN.geGrantedAuthorities()) .build();
+	 * 
+	 * return new InMemoryUserDetailsManager(user1,user2); }
+	 */
 	@Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
 	@Bean
-	protected UserDetailsService userDetailsService() {
-		// TODO Auto-generated method stub
-		UserDetails user1 = User.builder().username("eby")
-					.password(encodeYourPassword("pass123"))
-					.authorities(Roles.USER.geGrantedAuthorities())
-					.build();
-		
-		UserDetails user2 = User.builder().username("john")
-				.password(encodeYourPassword("pass123"))
-				.authorities(Roles.ADMIN.geGrantedAuthorities())
-				.build();
-	
-		return new InMemoryUserDetailsManager(user1,user2);
+	public DaoAuthenticationProvider daoAuthenticationProvider()
+	{
+		DaoAuthenticationProvider dap = new DaoAuthenticationProvider();
+		dap.setPasswordEncoder(ps);
+		dap.setUserDetailsService(userDetailsService);
+		return dap;
 	}
 
 }
